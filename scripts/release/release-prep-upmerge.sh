@@ -3,7 +3,7 @@
 git checkout develop;
 
 # Get version in `develop` (We wantt this to be version in the final README)
-VERSION=`less README.md | head -n 3`;
+# VERSION=$(less README.md | head -n 3);
 
 # upmerge from branch input
 git pull;

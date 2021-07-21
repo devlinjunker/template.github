@@ -14,7 +14,7 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 main() {
 
   # get current branch name
-  local branch="$(git rev-parse --abbrev-ref HEAD)"
+  branch="$(git rev-parse --abbrev-ref HEAD)"
 
   # ignore `patch-*` branches
   if [[ $branch =~ patch-[0-9]+.[0-9]+.[0-9]+ ]]; then
@@ -22,15 +22,15 @@ main() {
   fi 
 
   # get prefixes from shared list
-  local PREFIXES=`$DIR/prefix-list.sh`
+  PREFIXES=$("$DIR"/prefix-list.sh)
 
   # create regexp for branch names
-  local regexp="^($(echo "${PREFIXES[@]}" | sed "s/ /|/g"))\/[A-Za-z0-9._\-]+$"
+  regexp="^(${PREFIXES[*]// /|})\/[A-Za-z0-9._\-]+$"
 
   # check that current branch matches regexp
   if [[ ! $branch =~ $regexp ]]; then
     # error if not found in list
-    return -1
+    return 1
   fi
 
 }

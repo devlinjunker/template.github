@@ -1,8 +1,7 @@
 #! /bin/bash
 
-git branch -a | grep $RELEASE_BRANCH;
 
-if [ $? -eq 0 ]; then
+if git branch -a | grep "$RELEASE_BRANCH"; then
   echo "::error::Release Branch Already Exists";
   exit 1        
 fi;

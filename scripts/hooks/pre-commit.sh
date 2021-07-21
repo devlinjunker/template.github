@@ -6,6 +6,7 @@
 DIR=$(dirname "${BASH_SOURCE[0]}")
 
 # if in hook, then prep PATH to find in repo `scripts/hooks/` dir 
+# shellcheck disable=SC2076
 if [[ $DIR =~ ".git" ]]; then
   DIR+="/../../scripts/hooks"
 fi
@@ -17,19 +18,18 @@ BRANCH_PROTECTION_ERROR=" ! No commits on this branch   "
 main() {
 
   # Call branch protection script
-  $DIR/branch-protections.sh
-  if [ $? -ne 0 ]; then
+  if ! $DIR/internal/branch-protections.sh; then
     echo "$(tput setaf 1)$(tput setab 7)$BRANCH_PROTECTION_ERROR$(tput sgr 0)"
-    return -1
+    return 1
   fi
 
   # Call branch name script
-  $DIR/branch-name.sh
-  if [ $? -ne 0 ]; then
+  
+  if ! $DIR/internal/branch-name.sh; then
     echo "$(tput setaf 1)$(tput setab 7)$BRANCH_NAME_ERROR$(tput sgr 0)"
     echo "  <prefix>/<description>"
-    echo "prefix options: ($($DIR/prefix-list.sh))"
-    return -1
+    echo "prefix options: ($($DIR/internal/prefix-list.sh))"
+    return 1
   fi
 
 }
